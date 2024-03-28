@@ -46,7 +46,7 @@ type Chapter struct {
 	Img       pq.StringArray `json:"img" db:"img"`
 	Name      string         `json:"name"`
 	AnimeName string         `json:"animeName" db:"animeName"`
-	CreatedAt time.Time      `json:"created" db:"createdAt"`
+	CreatedAt time.Time      `json:"createdAt" db:"createdAt"`
 }
 
 // @Summary Get all mangas

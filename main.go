@@ -31,7 +31,7 @@ func main() {
 
 	router := http.NewServeMux()
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:4000", "http://localhost:3000"},
+             AllowedOrigins: []string{"http://localhost:4000", "http://localhost:3000", "https://golang-on-koyeb-mankago.koyeb.app/"},
 	})
 
 	db, err := db.DBConnection()

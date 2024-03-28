@@ -1,0 +1,370 @@
+basePath: /
+definitions:
+  handler.ChapterSwag:
+    properties:
+      animeName:
+        type: string
+      chapter:
+        type: integer
+      created:
+        type: string
+      genres:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+    type: object
+  handler.FavoriteResponse:
+    properties:
+      isFavorite:
+        type: boolean
+    type: object
+  handler.MangaSwag:
+    properties:
+      author:
+        type: string
+      averageRating:
+        type: number
+      chapters:
+        items:
+          $ref: '#/definitions/handler.ChapterSwag'
+        type: array
+      country:
+        type: string
+      describe:
+        type: string
+      genres:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+      img:
+        type: string
+      imgHeader:
+        type: string
+      name:
+        type: string
+      popularity:
+        type: integer
+      published:
+        type: integer
+      ratingCount:
+        type: integer
+      status:
+        type: string
+    type: object
+  handler.SuccessResponse:
+    properties:
+      success:
+        type: string
+    type: object
+  handler.UserSwag:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      favorite:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Manga search
+  title: Manka Api
+  version: "1.0"
+paths:
+  /filter:
+    get:
+      consumes:
+      - application/json
+      description: Find Manga Chapter
+      operationId: Filter-anime
+      parameters:
+      - description: Name of the Manga
+        in: query
+        name: name
+        type: string
+      - collectionFormat: csv
+        description: Chapter of the Manga
+        in: query
+        items:
+          type: string
+        name: genres
+        type: array
+      - description: Name of the Manga
+        in: query
+        name: status
+        type: string
+      - description: Chapter of the Manga
+        in: query
+        name: country
+        type: string
+      - description: field of the Manga
+        in: query
+        name: orderField
+        type: string
+      - description: sort of the Manga
+        in: query
+        name: orderSort
+        type: string
+      - description: page not 0
+        in: query
+        name: page
+        type: integer
+      - description: perPage
+        in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.MangaSwag'
+            type: array
+      summary: Get a chapter
+      tags:
+      - Manga
+  /manga:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a manga by its name
+      operationId: get-manga-by-name
+      parameters:
+      - description: Name of the Manga
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.MangaSwag'
+      summary: Get a manga by name
+      tags:
+      - Manga
+  /manga/{name}/{chapter}:
+    get:
+      consumes:
+      - application/json
+      description: Find Manga Chapter
+      operationId: get-chapter
+      parameters:
+      - description: Name of the Manga
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Chapter of the Manga
+        in: path
+        name: chapter
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ChapterSwag'
+      summary: Get a chapter
+      tags:
+      - Manga
+  /mangas:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all mangas
+      operationId: get-all-mangas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.MangaSwag'
+            type: array
+      summary: Get all mangas
+      tags:
+      - Manga
+  /popular:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of popular mangas
+      operationId: get-popular-manga
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.MangaSwag'
+            type: array
+      summary: Get popular mangas
+      tags:
+      - Manga
+  /user/{email}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a user its email
+      operationId: get-user-by-email
+      parameters:
+      - description: User Email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.UserSwag'
+      summary: Get a user by email
+      tags:
+      - User
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create
+      operationId: create-or-cheack-user
+      parameters:
+      - description: Auth Body
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.UserSwag'
+      summary: Create or cheack user
+      tags:
+      - User
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      operationId: delete-user
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+      summary: delete user by email
+      tags:
+      - User
+  /user/favorite/{name}/{email}:
+    post:
+      consumes:
+      - application/json
+      description: Toggle manga
+      operationId: toggle-favorite-manga
+      parameters:
+      - description: manga name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+      summary: Toggle Favorite manga
+      tags:
+      - User
+  /user/favorite/list:
+    get:
+      consumes:
+      - application/json
+      description: User Favorites
+      operationId: get-user-list-manga
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.MangaSwag'
+            type: array
+      summary: User favorite Mangas
+      tags:
+      - User
+  /user/favorite/one:
+    get:
+      consumes:
+      - application/json
+      description: User Favorite
+      operationId: get-user-favorite-manga
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.FavoriteResponse'
+      summary: User favorite Manga
+      tags:
+      - User
+swagger: "2.0"
